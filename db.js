@@ -2,7 +2,6 @@ const client = require("mongodb").MongoClient;
 const mongodb = require("mongodb");
 require('dotenv').config()
 const DB_NAME = "data";
-// const URL = `mongodb+srv://root:5VlAhsxJrzh5OCXT@cluster0.3fdnv.mongodb.net/${DB_NAME}?authSource=admin`;
 const URL=process.env.DB_URL
 const mongo = client.connect(URL, { useNewUrlParser: true });
 const { ComparePassword, HashPassword } = require("./auth/bcryptPassword");
