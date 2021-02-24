@@ -5,10 +5,10 @@ const DB_NAME = "data";
 const URL=process.env.DB_URL
 const mongo = client.connect(URL, { useNewUrlParser: true });
 const { ComparePassword, HashPassword } = require("./auth/bcryptPassword");
-   console.log(URL);
+  
 mongo.catch((err) => {
   if (err) {
-    console.log(err);
+    console.log("Error     "+err);
   } else {
     console.log("Mongodb is Connected");
   }
