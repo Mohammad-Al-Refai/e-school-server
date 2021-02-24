@@ -1,0 +1,36 @@
+{
+    "exam_name": "Exam 1",
+    "exam_end_mark": "100",
+    "exam_questions": [
+        {
+            "mark": 15,
+            "text": "how .......",
+            "options": [
+                "1",
+                "2",
+                "3"
+            ],
+            "correct": "A"
+        },
+        {
+            "mark": 518,
+            "text": "whish .......",
+            "options": [
+                "1",
+                "2",
+                "3"
+            ],
+            "correct": "C"
+        },
+        {
+            "mark": 61,
+            "text": "why ........",
+            "options": [
+                "1",
+                "2",
+                "3"
+            ],
+            "correct": "C"
+        }
+    ]
+}
