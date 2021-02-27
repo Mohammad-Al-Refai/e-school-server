@@ -55,6 +55,18 @@ route.route("/tech/add/student").post((req, res) => {
     }
   });
 });
+route.route("/tech/get/students").post((req, res) => {
+  let token = req.headers.authorization.split(" ")[1];
+  jwt.readToken(token, (result) => {
+    if (result.state) {
+      db.GetTeacherStudents(result.data.email,(data)=>{
+        res.send({state:true,data:data})
+      })
+    } else {
+      res.send({ state: false, msg: "error" });
+    }
+  });
+});
 route.route("/student/login").post((req, res) => {
   let email = req.body.email;
   let pin = req.body.pin;
@@ -142,6 +154,31 @@ route.route("/tech/add/exam").post((req, res) => {
         } else {
           res.send({ state: false, msg: "Error when create exam" });
         }
+      });
+    } else {
+      res.send({ state: false, msg: "Error in auth" });
+    }
+  });
+});
+route.route("/tech/get-all/students").get((req, res) => {
+  let token = req.headers.authorization.split(" ")[1];
+  jwt.readToken(token, (values) => {
+    if (values.state) {
+      db.GetTeacherStudents(values.data.email, (data) => {
+        res.send({ state: true, msg: "ok", data: data });
+      });
+    } else {
+      res.send({ state: false, msg: "Error in auth" });
+    }
+  });
+});
+route.route("/tech/get/student").get((req, res) => {
+  let token = req.headers.authorization.split(" ")[1];
+  let id=req.body.id;
+  jwt.readToken(token, (values) => {
+    if (values.state) {
+      db.getStudentExam(id, (data) => {
+        res.send({ state: true, msg: "ok", data: data });
       });
     } else {
       res.send({ state: false, msg: "Error in auth" });
