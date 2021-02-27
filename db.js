@@ -223,7 +223,7 @@ function GetTeacherStudents(teacher_email, done) {
           values.forEach((e) =>
             result.push({ _id: e._id, name: e.name, email: e.email })
           );
-          done([true, result]);
+          done(result);
         } else {
           done(false);
         }
