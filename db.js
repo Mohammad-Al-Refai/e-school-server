@@ -1,14 +1,14 @@
 const client = require("mongodb").MongoClient;
 const mongodb = require("mongodb");
-require('dotenv').config()
+require("dotenv").config();
 const DB_NAME = "data";
-const URL=process.env.DB_URL
+const URL = process.env.DB_URL;
 const mongo = client.connect(URL, { useNewUrlParser: true });
 const { ComparePassword, HashPassword } = require("./auth/bcryptPassword");
-  
+
 mongo.catch((err) => {
   if (err) {
-    console.log("Error     "+err);
+    console.log("Error     " + err);
   } else {
     console.log("Mongodb is Connected");
   }
@@ -211,6 +211,25 @@ function CreateExam(teacher_email, data, done) {
       });
   });
 }
+function GetTeacherStudents(teacher_email, done) {
+  mongo.then((db) => {
+    db.db(DB_NAME)
+      .collection("students")
+      .find({ teacher: teacher_email })
+      .toArray()
+      .then((values) => {
+        let result = [];
+        if (values.length !== 0) {
+          values.forEach((e) =>
+            result.push({ _id: e._id, name: e.name, email: e.email })
+          );
+          done([true, result]);
+        } else {
+          done(false);
+        }
+      });
+  });
+}
 function GetTeacherExams(teacher_email, done) {
   mongo.then((db) => {
     db.db(DB_NAME)
@@ -218,7 +237,6 @@ function GetTeacherExams(teacher_email, done) {
       .find({ teacher: teacher_email })
       .toArray()
       .then((values) => {
-        console.log(values);
         if (values.length !== 0) {
           done([true, values]);
         } else {
@@ -236,6 +254,25 @@ function IsExist(table, email, done) {
       .then((values) => {
         if (values.length !== 0) {
           done(true);
+        } else {
+          done(false);
+        }
+      });
+  });
+}
+function getStudentExam(student_id, done) {
+  mongo.then((db) => {
+    let result = [];
+    db.db(DB_NAME)
+      .collection("exams")
+      .find({ _id: new mongodb.ObjectId(student_id) })
+      .toArray()
+      .then((values) => {
+        if (values.length !== 0) {
+          values.forEach((e) =>
+            result.push({ exam_name: e.name, date: e.date })
+          );
+          done(values);
         } else {
           done(false);
         }
@@ -267,4 +304,6 @@ module.exports = {
   CreateExam,
   GetTeacherExams,
   DeleteExam,
+  GetTeacherStudents,
+  getStudentExam,
 };
