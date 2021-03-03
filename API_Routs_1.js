@@ -177,9 +177,15 @@ route.route("/tech/get/student").get((req, res) => {
   let id=req.body.id;
   jwt.readToken(token, (values) => {
     if (values.state) {
-      db.getStudentExam(id, (data) => {
-        res.send({ state: true, msg: "ok", data: data });
-      });
+      if(id===""){
+        res.send({ state: false, msg: "no id" });
+      }else{
+        db.getStudentExam(id, (data_exam) => {
+        db.getStudent(id,(data_student)=>{
+          res.send({ state: true, msg: "ok", data: {studentData:data_student,exams:data_exam} });
+        })
+        });
+      }
     } else {
       res.send({ state: false, msg: "Error in auth" });
     }

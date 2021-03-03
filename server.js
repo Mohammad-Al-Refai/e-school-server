@@ -7,7 +7,6 @@ app.use(bp.json())
 require('dotenv').config()
 app.use("/api",route)
 
-"old Password != New Password"
 
 
 

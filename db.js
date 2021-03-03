@@ -21,7 +21,7 @@ function RegisterTeacher(name, email, password, done) {
         mongo.then((db) => {
           db.db(DB_NAME)
             .collection("teachers")
-            .insertOne({ name: name, email: email, password: result })
+            .insertOne({ name: name, email: email, password: result   , date:getDate(),})
             .then((err) => {
               done(true);
             });
@@ -56,6 +56,7 @@ function LoginTeacher(email, password, done) {
 }
 function RegisterStudent(teacher_email, name, email, pin, done) {
   IsExist("students", email, (exist) => {
+   
     if (exist === false) {
       HashPassword(pin, (result) => {
         mongo.then((db) => {
@@ -65,6 +66,7 @@ function RegisterStudent(teacher_email, name, email, pin, done) {
               name: name,
               email: email,
               pin: result,
+              date:getDate(),
               teacher: teacher_email,
             })
             .then((err) => {
@@ -205,6 +207,7 @@ function CreateExam(teacher_email, data, done) {
         mark: exam_end_mark,
         questions: questions,
         teacher: teacher_email,
+        date:getDate(),
       })
       .then((err) => {
         done(true);
@@ -237,6 +240,7 @@ function GetTeacherExams(teacher_email, done) {
       .find({ teacher: teacher_email })
       .toArray()
       .then((values) => {
+        console.log(values)
         if (values.length !== 0) {
           done([true, values]);
         } else {
@@ -279,6 +283,22 @@ function getStudentExam(student_id, done) {
       });
   });
 }
+function getStudent(student_id, done) {
+  mongo.then((db) => {
+    
+    db.db(DB_NAME)
+      .collection("students")
+      .find({ _id: new mongodb.ObjectId(student_id) })
+      .toArray()
+      .then((values) => {
+        if (values.length !== 0) {
+          done({name:values[0].name,email:values[0].email,date:values[0].date});
+        } else {
+          done(false);
+        }
+      });
+  });
+}
 function DeleteExam(exam_id, done) {
   mongo.then((db) => {
     db.db(DB_NAME)
@@ -293,6 +313,14 @@ function DeleteExam(exam_id, done) {
       });
   });
 }
+
+
+function getDate(){
+  let year=new Date().getFullYear()
+  let month=new Date().getMonth()
+  let day=new Date().getDay()
+  return year+"/"+month+"/"+day
+}
 module.exports = {
   RegisterTeacher,
   LoginTeacher,
@@ -305,5 +333,5 @@ module.exports = {
   GetTeacherExams,
   DeleteExam,
   GetTeacherStudents,
-  getStudentExam,
+  getStudentExam,getStudent
 };
