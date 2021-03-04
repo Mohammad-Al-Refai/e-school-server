@@ -174,8 +174,8 @@ route.route("/tech/get-all/students").get((req, res) => {
 });
 route.route("/tech/get/student/:id").get((req, res) => {
 //   let token = req.headers.authorization.split(" ")[1];
-  let id=req.params.id;
-  console.log(req.params)
+//   let id=req.params.id;
+  console.log(req)
 //   jwt.readToken(token, (values) => {
 //     if (values.state) {
 //       if(id===""){
