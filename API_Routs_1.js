@@ -173,24 +173,24 @@ route.route("/tech/get-all/students").get((req, res) => {
   });
 });
 route.route("/tech/get/student/:id").get((req, res) => {
-//   let token = req.headers.authorization.split(" ")[1];
-//   let id=req.params.id;
+  let token = req.headers.authorization.split(" ")[1];
+  let id=req.params.id;
   console.log(req)
-//   jwt.readToken(token, (values) => {
-//     if (values.state) {
-//       if(id===""){
-//         res.send({ state: false, msg: "no id" });
-//       }else{
-//         db.getStudentExam(id, (data_exam) => {
-//         db.getStudent(id,(data_student)=>{
-//           res.send({ state: true, msg: "ok", data: {studentData:data_student,exams:data_exam} });
-//         })
-//         });
-//       }
-//     } else {
-//       res.send({ state: false, msg: "Error in auth" });
-//     }
-//   });
+  jwt.readToken(token, (values) => {
+    if (values.state) {
+      if(id===""){
+        res.send({ state: false, msg: "no id" });
+      }else{
+        db.getStudentExam(id, (data_exam) => {
+        db.getStudent(id,(data_student)=>{
+          res.send({ state: true, msg: "ok", data: {studentData:data_student,exams:data_exam} });
+        })
+        });
+      }
+    } else {
+      res.send({ state: false, msg: "Error in auth" });
+    }
+  });
 });
 route.route("/tech/get-all/exams").get((req, res) => {
   let token = req.headers.authorization.split(" ")[1];
