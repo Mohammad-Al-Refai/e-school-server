@@ -217,5 +217,26 @@ route.route("/tech/delete/exam").delete((req, res) => {
     }
   });
 });
-
+route.route("/tech/details/exam").post((req, res) => {
+  let token = req.headers.authorization.split(" ")[1];
+  let exam_id = req.body.exam_id;
+  if(exam_id==""){
+    res.send({state:false,msg:"no exam id"})
+  }else{
+    jwt.readToken(token, (values) => {
+      if (values.state) {
+        console.log(values)
+          db.getExamDetails(exam_id,(result)=>{
+          if(result!=false){
+            res.send(result)
+          }else{
+            res.send({state:false,msg:"exam is not found"})
+          }
+          })
+      } else {
+        res.send({ state: false, msg: "Error in auth" });
+      }
+    });
+  }
+});
 module.exports = route;
