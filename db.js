@@ -285,7 +285,6 @@ function getStudentExam(student_id, done) {
 }
 function getStudent(student_id, done) {
   mongo.then((db) => {
-    
     db.db(DB_NAME)
       .collection("students")
       .find({ _id: new mongodb.ObjectId(student_id) })
@@ -313,14 +312,45 @@ function DeleteExam(exam_id, done) {
       });
   });
 }
+function getExamDetails(exam_id,done){
+ 
+  mongo.then((db) => {
+    db.db(DB_NAME)
+      .collection("exams")
+      .find({ _id: new mongodb.ObjectId(exam_id) })
+      .toArray()
+      .then((values) => {
+     
+        if (values.length !== 0) {
+          let exam_details={name:values[0].name,mark:values[0].mark,questions:values[0].questions,date:values[0].date};
+          mongo.then((db) => {
+            db.db(DB_NAME)
+              .collection("done_exams")
+              .find({ exam_id:exam_id })
+              .toArray()
+              .then((students) => {
+                console.log(students)
+                if (values.length !== 0) {
+                  done({exam:exam_details,students:students});
+                } else {
+                  done(false);
+                }
+              });
+          });
+        } else {
+          done(false);
+        }
+      });
+  });
 
-
+}
 function getDate(){
   let year=new Date().getFullYear()
   let month=new Date().getMonth()
   let day=new Date().getDay()
   return year+"/"+month+"/"+day
 }
+
 module.exports = {
   RegisterTeacher,
   LoginTeacher,
@@ -333,5 +363,5 @@ module.exports = {
   GetTeacherExams,
   DeleteExam,
   GetTeacherStudents,
-  getStudentExam,getStudent
+  getStudentExam,getStudent,getExamDetails
 };
