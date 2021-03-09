@@ -204,7 +204,7 @@ route.route("/tech/get-all/exams").get((req, res) => {
     }
   });
 });
-route.route("/tech/delete/exam").delete((req, res) => {
+route.route("/tech/delete/exam").post((req, res) => {
   let token = req.headers.authorization.split(" ")[1];
   let exam_id = req.body.id;
   jwt.readToken(token, (values) => {
